@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MaxSamsonenko/goit-js-finalproject#readme",
   "dependencies": {
-    "basiclightbox": "^5.0.4"
+    "basiclightbox": "^5.0.4",
+    "simplelightbox": "^2.14.2"
   }
 }

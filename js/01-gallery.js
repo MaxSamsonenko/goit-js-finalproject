@@ -1,7 +1,10 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
+
+//access gallery container
 const gallery = document.querySelector(".gallery");
 
+//create instance of basicLightbox
 const instance = basicLightbox.create(
 	`
     <div class="backdrop">
@@ -11,7 +14,7 @@ const instance = basicLightbox.create(
     </div>
 `
 );
-
+//create gallery markup
 const markup = galleryItems
 	.map(
 		({ preview, original, description }) => `<li class="gallery__item">
@@ -26,26 +29,14 @@ const markup = galleryItems
 </li>`
 	)
 	.join("");
-
+//add markup to the gallery
 gallery.innerHTML = markup;
 
-const onEscPress = (e) => {
-	if (e.code !== "Escape") {
-		return;
-	}
-	window.removeEventListener("keydown", onEscPress);
-	instance.close();
-};
-const onModalClick = () => {
-	window.removeEventListener("keydown", onEscPress);
-	instance.close();
-};
-const addModalListener = () => {
-	const modal = document.querySelector(".modal");
-	modal.addEventListener("click", onModalClick);
-	window.addEventListener("keydown", onEscPress);
-};
-const handleShowImg = (e) => {
+//add event listener to the gallery container
+gallery.addEventListener("click", handleShowImg);
+
+//check to see if an image was clicked, and if yes, open basiclightbox instance, and add modal window event listener
+function handleShowImg(e) {
 	e.preventDefault();
 	if (e.target.nodeName !== "IMG") {
 		return;
@@ -56,6 +47,24 @@ const handleShowImg = (e) => {
 	img.alt = e.target.alt;
 
 	addModalListener();
-};
+}
+//adds event listener on modal window and window object
+function addModalListener() {
+	const modal = document.querySelector(".modal");
+	modal.addEventListener("click", onModalClick);
+	window.addEventListener("keydown", onEscPress);
+}
+//close modal window and remove event listener from window obj on click
+function onModalClick() {
+	window.removeEventListener("keydown", onEscPress);
+	instance.close();
+}
 
-gallery.addEventListener("click", handleShowImg);
+//close modal on "Escape" key press, and remove event listener from window obj
+function onEscPress(e) {
+	if (e.code !== "Escape") {
+		return;
+	}
+	window.removeEventListener("keydown", onEscPress);
+	instance.close();
+}
