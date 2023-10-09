@@ -22,8 +22,4 @@ galleryContainer.innerHTML = galleryMarkup;
 let gallerySlider = new SimpleLightbox(".gallery a", {
 	captionType: "data",
 	captionDelay: 250,
-	fixedClass: "sl-image",
 });
-
-//initiate simpleLightBox instance
-gallerySlider.on("show.simplelightbox");

@@ -4,16 +4,6 @@ import { galleryItems } from "./gallery-items.js";
 //access gallery container
 const gallery = document.querySelector(".gallery");
 
-//create instance of basicLightbox
-const instance = basicLightbox.create(
-	`
-    <div class="backdrop">
-        <div class="modal">
-            <img src="" class="original__image"/>
-    	</div>
-    </div>
-`
-);
 //create gallery markup
 const markup = galleryItems
 	.map(
@@ -41,30 +31,31 @@ function handleShowImg(e) {
 	if (e.target.nodeName !== "IMG") {
 		return;
 	}
+	//create instance of basicLightbox
+	const instance = basicLightbox.create(
+		`
+    <div class="backdrop">
+        <div class="modal">
+            <img src="${e.target.dataset.source}" class="original__image" alt="${e.target.alt}"/>
+    	</div>
+    </div>
+`,
+		{
+			onShow: (instance) => {
+				window.addEventListener("keydown", onEscPress);
+				instance.element().addEventListener("click", () => instance.close());
+			},
+			onClose: () => {
+				window.removeEventListener("keydown", onEscPress);
+			},
+		}
+	);
 	instance.show();
-	const img = instance.element().querySelector("img");
-	img.src = e.target.dataset.source;
-	img.alt = e.target.alt;
 
-	addModalListener();
-}
-//adds event listener on modal window and window object
-function addModalListener() {
-	const modal = document.querySelector(".modal");
-	modal.addEventListener("click", onModalClick);
-	window.addEventListener("keydown", onEscPress);
-}
-//close modal window and remove event listener from window obj on click
-function onModalClick() {
-	window.removeEventListener("keydown", onEscPress);
-	instance.close();
-}
-
-//close modal on "Escape" key press, and remove event listener from window obj
-function onEscPress(e) {
-	if (e.code !== "Escape") {
-		return;
+	function onEscPress(e) {
+		if (e.code !== "Escape") {
+			return;
+		}
+		instance.close();
 	}
-	window.removeEventListener("keydown", onEscPress);
-	instance.close();
 }
